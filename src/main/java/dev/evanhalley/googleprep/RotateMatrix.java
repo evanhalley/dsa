@@ -1,7 +1,11 @@
 package dev.evanhalley.googleprep;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class RotateMatrix {
 
@@ -9,7 +13,7 @@ public class RotateMatrix {
     private static final int[][] MOVES = {{ 0, 1 }, { 1, 0 }, {0, -1}, { -1, 0}};
 
     public static void main(String[] args) {
-        int[][] matrix = {  {1,2}, {3,4} };
+        int[][] matrix = {  {1} };
         new RotateMatrix().rotate(matrix);
     }
 
@@ -19,32 +23,39 @@ public class RotateMatrix {
     }
 
     public void rotateMatrix(int[][] matrix, int rightBottomBound, int leftTopBound, int spacesToMove) {
-        int currentRow = 0;
-        int currentCol = 0;
+        int currentCol = leftTopBound;
 
         if (spacesToMove > 0) {
-            List<Integer[]> destinations = calculateDestinations(currentRow, currentCol, rightBottomBound,
-                    leftTopBound, spacesToMove);
-            executeSwaps(matrix, destinations);
+            for (int i = 0; i < spacesToMove; i++) {
+                List<Point> destinations = calculateDestinations(leftTopBound, currentCol++, rightBottomBound,
+                        leftTopBound, spacesToMove);
+                executeSwaps(matrix, destinations);
+            }
             rotateMatrix(matrix, rightBottomBound - 1, leftTopBound + 1,
                     spacesToMove - 2);
         }
     }
 
-    public void executeSwaps(int[][] matrix, List<Integer[]> destinations) {
-        int temp = matrix[destinations.get(3)[0]][destinations.get(3)[1]];
-        matrix[destinations.get(1)[0]][destinations.get(1)[1]] = matrix[destinations.get(0)[0]][destinations.get(0)[1]];
-        matrix[destinations.get(2)[0]][destinations.get(2)[1]] = matrix[destinations.get(1)[0]][destinations.get(1)[1]];
-        matrix[destinations.get(3)[0]][destinations.get(3)[1]] = matrix[destinations.get(2)[0]][destinations.get(2)[1]];
-        matrix[destinations.get(0)[0]][destinations.get(0)[1]] = temp;
+    public void executeSwaps(int[][] matrix, List<Point> points) {
+        Map<Point, Integer> tempMap = new HashMap<>();
+
+        for (Point point : points) {
+            tempMap.put(point, matrix[point.row][point.col]);
+        }
+
+        matrix[points.get(0).row][points.get(0).col] = tempMap.get(points.get(3));
+        matrix[points.get(3).row][points.get(3).col] = tempMap.get(points.get(2));
+        matrix[points.get(2).row][points.get(2).col] = tempMap.get(points.get(1));
+        matrix[points.get(1).row][points.get(1).col] = tempMap.get(points.get(0));
     }
 
-    public List<Integer[]> calculateDestinations(int row, int col, int rightBottomBound, int leftTopBound, int numMoves) {
-        List<Integer[]> destinations = new ArrayList<>(numMoves);
+    public List<Point> calculateDestinations(int row, int col, int rightBottomBound, int leftTopBound, int numMoves) {
+        List<Point> destinations = new ArrayList<>(numMoves);
         int tempCol = col;
         int tempRow = row;
 
-        for (int[] move : MOVES) {
+        for (int i = 0; i < MOVES.length; i++) {
+            int[] move = MOVES[i];
             boolean moveSaved = false;
 
             while (!moveSaved) {
@@ -81,12 +92,33 @@ public class RotateMatrix {
 
                 if (tempCol <= rightBottomBound && tempCol >= leftTopBound &&
                         tempRow <= rightBottomBound && tempRow >= leftTopBound) {
-                    destinations.add(new Integer[] { tempRow, tempCol });
+                    destinations.add(i, new Point(i, tempRow, tempCol));
                     moveSaved = true;
                 }
             }
         }
         return destinations;
+    }
+
+    public static class Point {
+        final int id;
+        final int row;
+        final int col;
+
+        public Point(int id ,int row, int col) {
+            this.id = id;
+            this.row = row;
+            this.col = col;
+        }
+
+        @Override
+        public String toString() {
+            return "Point{" +
+                    "id=" + id +
+                    ", row=" + row +
+                    ", col=" + col +
+                    '}';
+        }
     }
 
 }
