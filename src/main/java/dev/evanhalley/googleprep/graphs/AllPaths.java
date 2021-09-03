@@ -4,9 +4,6 @@ import dev.evanhalley.googleprep.util.GraphUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Deque;
-import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -17,7 +14,7 @@ public class AllPaths {
         int[][] edges = new int[][] {{4,3,1}, {3,2,4}, {3}, {4}, {}};
         //int[][] edges = new int[][] {{1}, {}};
         //int[][] edges = new int[][] {{1,3}, {2}, {3}, {}};
-        Map<Integer, Set<Integer>> adjList = GraphUtil.toDirectedAdjacencyList(edges);
+        Map<Integer, Set<Integer>> adjList = GraphUtil.toDirectedGraph(edges);
         List<List<Integer>> paths = new ArrayList<>();
         allPaths(adjList, edges.length - 1, Collections.singletonList(0), paths);
         System.out.println(paths);
