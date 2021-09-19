@@ -22,26 +22,34 @@ public class KahnsAlgorithm {
     public static List<Integer> topologicalSort(int[][] edges) {
         List<Integer> result = new ArrayList<>(edges.length);
 
-        // build adjacency list
+        // 1) build adjacency list
         Map<Integer, Set<Integer>> graph = GraphUtil.toDirectedGraph(edges);
 
-        // calculate the incoming degree
+        // 2) calculate the in-degrees (how many nodes point to a given node)
         Map<Integer, Integer> inDegree = GraphUtil.calculateInDegree(edges);
 
-        // create queue to store work
+        // 3) create queue to store work
         Deque<Integer> queue = new LinkedList<>();
 
-        // prime with zero degree nodes
+        // 4) prime queue with zero degree nodes
         addEligibleNodesToQueue(inDegree, queue);
 
+        // 5) BFS
         while (!queue.isEmpty()) {
             Integer node = queue.poll();
+
+            // remove the node from the graph, get the nodes this node points to
             Set<Integer> children = graph.remove(node);
 
             for (Integer child : children) {
+                // decrease the indegree of the children by one
                 inDegree.put(child, inDegree.get(child) - 1);
             }
+
+            // add the node to our list storing our topological dort
             result.add(node);
+
+            // add zero degree nodes to the queue
             addEligibleNodesToQueue(inDegree, queue);
         }
         return result;
