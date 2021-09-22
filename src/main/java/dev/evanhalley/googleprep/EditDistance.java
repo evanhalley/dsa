@@ -6,9 +6,9 @@ public class EditDistance {
         System.out.println(editDistance("horse", "hors"));
     }
 
-    public static int editDistance(String str1, String str2) {
-        int m = str1.length();
-        int n = str2.length();
+    public static int editDistance(String source, String target) {
+        int m = source.length();
+        int n = target.length();
         int[][] dp = new int[m + 1][n + 1];
 
         for (int i = 0; i <= m; i++) {
@@ -26,7 +26,7 @@ public class EditDistance {
                 }
 
                 // If last characters are same, ignore last char and recur for remaining string
-                else if (str1.charAt(i - 1) == str2.charAt(j - 1)) {
+                else if (source.charAt(i - 1) == target.charAt(j - 1)) {
                     dp[i][j] = dp[i - 1][j - 1];
                 }
 

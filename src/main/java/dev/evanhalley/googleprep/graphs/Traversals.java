@@ -1,5 +1,6 @@
 package dev.evanhalley.googleprep.graphs;
 
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -47,7 +48,7 @@ public class Traversals {
 
     public static String depthFirst(Map<String, String[]> graph, String start) {
         StringBuilder sb = new StringBuilder();
-        Stack<String> stack = new Stack<>();
+        Deque<String> stack = new LinkedList<>();
         stack.push(start);
 
         while (!stack.isEmpty()) {
@@ -69,15 +70,15 @@ public class Traversals {
     public static String breadthFirst(Map<String, String[]> graph, String start) {
         StringBuilder sb = new StringBuilder();
         Queue<String> queue = new LinkedList<>();
-        queue.add(start);
+        queue.offer(start);
 
         while (!queue.isEmpty()) {
-            String node = queue.remove();
+            String node = queue.poll();
             sb.append(node);
             String[] neighbors = graph.get(node);
 
             for (String neighbor : neighbors) {
-                queue.add(neighbor);
+                queue.offer(neighbor);
             }
 
             if (!queue.isEmpty()) {

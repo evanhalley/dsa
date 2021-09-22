@@ -1,16 +1,16 @@
 package dev.evanhalley.googleprep.tree;
 
-public class SegmentTree {
+public class RangeMinQueryTree {
 
     private final int[] segmentTree;
 
     public static void main(String[] args) {
         int[] data = { -1, 3, 6, 99, 8, 6, 5, 0 };
-        SegmentTree segmentTree = new SegmentTree(data);
-        System.out.println(segmentTree.rangeMinQuery(4, 7, 0, data.length - 1, 0));
+        RangeMinQueryTree rangeMinQueryTree = new RangeMinQueryTree(data);
+        System.out.println(rangeMinQueryTree.rangeMinQuery(4, 7, 0, data.length - 1, 0));
     }
 
-    public SegmentTree(int[] data) {
+    public RangeMinQueryTree(int[] data) {
         segmentTree = new int[data.length * 2 - 1];
         constructTree(data, 0, data.length - 1, 0);
     }

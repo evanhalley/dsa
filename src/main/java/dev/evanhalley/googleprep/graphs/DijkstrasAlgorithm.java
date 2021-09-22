@@ -50,6 +50,7 @@ public class DijkstrasAlgorithm {
                 int v = edge.destination;
                 int weight = edge.weight;
 
+                // we found a cheaper route to get to v
                 if (!visited.contains(v) && (distance.get(u) + weight  < distance.get(v))) {
                     distance.put(v, distance.get(u) + weight);
                     visited.add(u);
